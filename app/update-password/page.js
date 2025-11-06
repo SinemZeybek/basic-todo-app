@@ -10,23 +10,23 @@ export default function UpdatePasswordPage() {
 
   async function handleUpdate(e) {
     e.preventDefault()
-    const { data, error } = await supabase.auth.updateUser({ password })
+    const { error } = await supabase.auth.updateUser({ password })
 
     if (error) setMessage(error.message)
     else {
-      setMessage('Şifre başarıyla güncellendi! 🎉')
+      setMessage('Password updated successfully! Redirecting...')
       setTimeout(() => router.push('/login'), 2000)
     }
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-      <h1 className="text-2xl font-bold mb-4">Yeni Şifre Belirle</h1>
+      <h1 className="text-2xl font-bold mb-4">Update Password</h1>
 
       <form onSubmit={handleUpdate} className="flex flex-col gap-3 w-72">
         <input
           type="password"
-          placeholder="Yeni şifre"
+          placeholder="New password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="border p-2 rounded"
@@ -36,7 +36,7 @@ export default function UpdatePasswordPage() {
           type="submit"
           className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
         >
-          Şifreyi Güncelle
+          Update Password
         </button>
       </form>
 

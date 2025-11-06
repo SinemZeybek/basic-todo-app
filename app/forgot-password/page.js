@@ -18,17 +18,17 @@ export default function ForgotPasswordPage() {
     })
 
     if (error) setError(error.message)
-    else setMessage('📧 Şifre sıfırlama e-postası gönderildi! Gelen kutunu kontrol et.')
+    else setMessage('Password reset email sent. Please check your inbox.')
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-      <h1 className="text-2xl font-bold mb-4">Şifremi Unuttum</h1>
+      <h1 className="text-2xl font-bold mb-4">Forgot Password</h1>
 
       <form onSubmit={handleReset} className="flex flex-col gap-3 w-72">
         <input
           type="email"
-          placeholder="E-posta adresin"
+          placeholder="Email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="border p-2 rounded"
@@ -38,19 +38,15 @@ export default function ForgotPasswordPage() {
           type="submit"
           className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
         >
-          Şifre sıfırlama maili gönder
+          Send Reset Email
         </button>
       </form>
 
       {message && <p className="text-green-600 mt-2">{message}</p>}
       {error && <p className="text-red-600 mt-2">{error}</p>}
 
-      {/* 🔹 Yeni eklenen bölüm */}
-      <Link
-        href="/login"
-        className="mt-6 text-blue-600 hover:underline text-sm"
-      >
-        ← Giriş sayfasına dön
+      <Link href="/login" className="mt-6 text-blue-600 hover:underline text-sm">
+        ← Back to Login
       </Link>
     </div>
   )

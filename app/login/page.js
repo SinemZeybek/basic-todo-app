@@ -1,50 +1,59 @@
 'use client'
 import { useState } from 'react'
-import { supabase } from '@/lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function LoginPage() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
+  const router = useRouter()
 
   async function handleLogin(e) {
     e.preventDefault()
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) setMessage(error.message)
     else {
-      setMessage('Giriş başarılı!')
-      router.push('/') // ana sayfaya yönlendir
+      setMessage('Login successful!')
+      router.push('/')
     }
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Giriş Yap</h1>
-      <form onSubmit={handleLogin} className="flex flex-col gap-3 w-64">
+    <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+      <h1 className="text-2xl font-bold mb-4">Login</h1>
+
+      <form onSubmit={handleLogin} className="flex flex-col gap-3 w-72">
         <input
           type="email"
-          placeholder="E-posta"
+          placeholder="Email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="border p-2 rounded"
+          required
         />
         <input
           type="password"
-          placeholder="Şifre"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="border p-2 rounded"
+          required
         />
         <button
           type="submit"
           className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
         >
-          Giriş Yap
+          Login
         </button>
       </form>
-      <p className="mt-4 text-gray-600">{message}</p>
+
+      {message && <p className="text-gray-700 mt-2">{message}</p>}
+
+      <Link href="/forgot-password" className="text-blue-600 hover:underline text-sm mt-2">
+        Forgot password?
+      </Link>
     </div>
   )
 }

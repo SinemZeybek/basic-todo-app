@@ -1,22 +1,30 @@
 'use client'
 import { useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
-import { useRouter } from 'next/navigation'
+import Loading from '../../components/Loading'
+import ErrorMessage from '../../components/ErrorMessage'
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
-  const router = useRouter()
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   async function handleSignup(e) {
     e.preventDefault()
-    setMessage('')
+    setLoading(true)
+    setError(null)
 
     const { error } = await supabase.auth.signUp({ email, password })
-    if (error) setMessage(error.message)
-    else setMessage('Sign-up successful! Please check your email to confirm your account.')
+    if (error) setError(error)
+    else setMessage('Sign-up successful! Please check your email.')
+
+    setLoading(false)
   }
+
+  if (loading) return <Loading />
+  if (error) return <ErrorMessage message={error.message} />
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-4">

@@ -2,24 +2,33 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import Link from 'next/link'
+import Loading from '../../components/Loading'
+import ErrorMessage from '../../components/ErrorMessage'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   async function handleReset(e) {
     e.preventDefault()
-    setError('')
+    setLoading(true)
+    setError(null)
     setMessage('')
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: 'http://localhost:3000/update-password',
     })
 
-    if (error) setError(error.message)
+    if (error) setError(error)
     else setMessage('Password reset email sent. Please check your inbox.')
+
+    setLoading(false)
   }
+
+  if (loading) return <Loading />
+  if (error) return <ErrorMessage message={error.message} />
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-4">
@@ -43,7 +52,6 @@ export default function ForgotPasswordPage() {
       </form>
 
       {message && <p className="text-green-600 mt-2">{message}</p>}
-      {error && <p className="text-red-600 mt-2">{error}</p>}
 
       <Link href="/login" className="mt-6 text-blue-600 hover:underline text-sm">
         ← Back to Login
@@ -51,3 +59,4 @@ export default function ForgotPasswordPage() {
     </div>
   )
 }
+

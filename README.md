@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js To-Do App (Supabase Authentication + Role Management)
 
-## Getting Started
+A full-stack To-Do application built with **Next.js**, **Supabase** and **TailwindCSS**.  
+This project includes authentication, role-based access control, admin tools, API routes and unit tests.  
+Developed as part of an internship assignment.
 
-First, run the development server:
+---
+
+## Features
+
+### Authentication
+- Sign up, login, logout
+- Forgot password + password update flow
+- Session management with Supabase
+
+### Role-Based Access
+- `user` → standard permissions
+- `super_admin` → admin dashboard access
+- Admin panel displays all users + their todo counts
+
+### To-Do Management
+- Add a todo
+- List todos
+- Mark complete/ incomplete
+- Delete todos
+- Users can only access their own todos
+
+### API Routes
+`/api/todos`
+- `GET` → fetch authenticated user's todos
+- `POST` → create a todo
+- `PATCH` → update todo status
+- `DELETE` → remove a todo
+ 
+
+---
+
+## Installation
+
+Clone the project and install dependencies:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

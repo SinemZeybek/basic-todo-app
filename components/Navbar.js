@@ -23,6 +23,7 @@ export default function Navbar() {
         <Link href="/admin/users" className="text-blue-600 hover:underline">
           Admin
         </Link>
+        <Link href="/chat">Chat</Link>
       </div>
       <button
         onClick={handleLogout}

@@ -64,7 +64,7 @@ export async function POST(request) {
 
     try {
       const completion = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
+        model: "gpt-4o-mini",
         messages,
       });
 
@@ -72,21 +72,19 @@ export async function POST(request) {
         completion.choices[0]?.message?.content ||
         "I'm having trouble generating a proper response right now.";
     } catch (err) {
-      console.error('OpenAI error:', err);
+      const requestId = request.headers.get("x-request-id") || "unknown";
+      console.error(`[OpenAI error] id=${requestId}:`, err);
 
-      // Quota / billing hatası durumunda fallback cevap
-      if (err?.status === 429 || err?.code === 'insufficient_quota') {
+      if (err?.status === 429 || err?.code === "insufficient_quota") {
         assistantMessage =
           "The AI service has reached its current quota, so this is a simulated response. " +
           "In a real production environment, this message would come from the OpenAI API.";
       } else {
-        // Diğer hatalarda da basit fallback
         assistantMessage =
           "Something went wrong while contacting the AI service. This is a fallback response.";
       }
     }
 
-    // Mesaj geçmişini Redis'te sakla (user + assistant)
     const toStore = [
       { role: 'user', content: userMessage },
       { role: 'assistant', content: assistantMessage },
@@ -105,9 +103,11 @@ export async function POST(request) {
       reply: assistantMessage,
     });
   } catch (error) {
-    console.error('Error in /api/chat:', error);
+    const requestId = request.headers.get("x-request-id") || "unknown";
+    console.error(`[Error] id=${requestId} in /api/chat:`, error);
+
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error", requestId },
       { status: 500 }
     );
   }

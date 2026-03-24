@@ -1,0 +1,45 @@
+services:
+  web:
+    build: ./apps/web
+    container_name: support-web
+    ports:
+      - "3000:3000"
+    env_file: .env.production
+    environment:
+      - REDIS_URL=redis://chat-redis:6379
+    depends_on:
+      - redis
+    networks:
+      - support-net
+
+  chat-worker:
+    build: ./apps/worker
+    container_name: support-worker
+    command: node worker.js
+    depends_on:
+      - redis
+    env_file:
+      - .env.production
+    environment:
+      - REDIS_URL=redis://chat-redis:6379
+      - NODE_ENV=production
+    networks:
+      - support-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: chat-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD:-changeme}
+    ports:
+      - "127.0.0.1:6379:6379"
+    networks:
+      - support-net
+    hostname: chat-redis
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+networks:
+  support-net:
+    driver: bridge
